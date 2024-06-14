@@ -10,6 +10,7 @@ typedef struct {
     char mot[TAILLE_MOT];
     char trouve[TAILLE_MOT];
     int erreurs;
+    bool lettres_utilisees[26];
 } Partie;
 
 void initialiser_partie(Partie *p);
@@ -19,5 +20,6 @@ void update_partie(Partie *p, char lettre);
 bool partie_finie(Partie *p);
 void afficher_pendu(int erreurs);
 void afficher_statistiques();
+void afficher_lettres_utilisees(Partie *p);
 
 #endif

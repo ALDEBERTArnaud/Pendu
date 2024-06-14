@@ -10,15 +10,29 @@
 void initialiser_partie(Partie *p) {
     strcpy(p->mot, dictionnaire[rand() % TAILLE_DICO]);
     int longueur = strlen(p->mot);
-    p->mot[longueur-1] = '\0';  // Enlève le caractère de fin de ligne '\n'
+    p->mot[longueur-1] = '\0';
     memset(p->trouve, '_', longueur-1);
     p->trouve[longueur-1] = '\0';
     p->erreurs = 0;
+    for (int i = 0; i < 26; i++) {
+        p->lettres_utilisees[i] = false;
+    }
+}
+
+void afficher_lettres_utilisees(Partie *p) {
+    printf("Lettres utilisees : ");
+    for (int i = 0; i < 26; i++) {
+        if (p->lettres_utilisees[i]) {
+            printf("%c ", 'A' + i);
+        }
+    }
+    printf("\n");
 }
 
 void afficher_partie(Partie *p) {
     printf("Mot: %s\n", p->trouve);
     afficher_pendu(p->erreurs);
+    afficher_lettres_utilisees(p);
 }
 
 char demander_lettre() {
@@ -43,6 +57,7 @@ void update_partie(Partie *p, char lettre) {
         p->erreurs++;
     }
     ajouter_lettre_proposee(lettre);
+    p->lettres_utilisees[lettre - 'A'] = true;
 }
 
 bool partie_finie(Partie *p) {
