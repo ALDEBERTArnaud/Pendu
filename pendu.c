@@ -39,8 +39,8 @@ char demander_lettre() {
     char lettre;
     do {
         printf("Proposez une lettre: ");
-        lettre = toupper(getchar());
-        while(getchar() != '\n');
+        scanf(" %c", &lettre);
+        lettre = toupper(lettre);
     } while(!isalpha(lettre));
     return lettre;
 }
