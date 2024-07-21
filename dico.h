@@ -1,9 +1,13 @@
 #ifndef DICO_H
 #define DICO_H
 
-#define TAILLE_DICO 35
+#define TAILLE_MOT 30
 
-extern const char *dictionnaire[TAILLE_DICO];
+extern char **dictionnaire;
+extern int taille_dico;
+
 void charger_dico(const char *fichier);
+void liberer_dico(void);
+char *choisir_mot(void);
 
 #endif

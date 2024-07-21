@@ -1,32 +1,85 @@
-Projet réalisé par Arnaud ALDEBERT, Esteban MORTIER, Tom COLLET-YAKOUBI et Alexandre MATHIEU
 # Jeu du Pendu en C
 
-Ce projet est une implémentation du jeu du pendu en langage C. Il utilise plusieurs fichiers pour organiser le code, y compris des fichiers d'en-tête pour les définitions et des fichiers source pour les implémentations.
+Ce projet est une implémentation du jeu classique du pendu en langage C, réalisé dans le cadre d'un projet scolaire.
+
+## Auteurs
+
+- Arnaud ALDEBERT
+- Esteban MORTIER
+- Tom COLLET-YAKOUBI
+- Alexandre MATHIEU
 
 ## Structure du Projet
 
-- `pendu.h` : Contient les définitions des structures et des prototypes de fonctions pour le jeu du pendu.
-- `dico.h` : Contient les définitions pour la gestion du dictionnaire.
-- `stats.h` : Contient les définitions pour la gestion des statistiques du jeu.
-- `dico.c` : Implémente les fonctions pour charger le dictionnaire à partir d'un fichier.
-- `stats.c` : Implémente les fonctions pour gérer les statistiques du jeu.
-- `pendu.c` : Implémente les fonctions principales du jeu, y compris l'initialisation de la partie, la gestion des erreurs, et l'affichage du pendu.
-- `CMakeLists.txt` : Fichier de configuration pour CMake, permettant de compiler le projet.
-- `dico.txt` : Fichier texte contenant les mots du dictionnaire utilisés dans le jeu.
+- `pendu.c` / `pendu.h` : Fichiers principaux du jeu
+- `dico.c` / `dico.h` : Gestion du dictionnaire
+- `stats.c` / `stats.h` : Gestion des statistiques
+- `CMakeLists.txt` : Configuration de compilation
+- `dico.txt` : Fichier de données pour le dictionnaire
+
+## Fonctionnalités
+
+- Interface en ligne de commande
+- Chargement dynamique du dictionnaire
+- Gestion des statistiques de jeu (parties jouées, gagnées, lettres proposées)
+- Affichage graphique du pendu en ASCII art
 
 ## Prérequis
 
-- Un compilateur C (par exemple, `gcc`)
+- Compilateur C (GCC recommandé, ou Visual Studio sur Windows)
 - CMake (version 3.5 ou supérieure)
+- Dr. Memory (optionnel, pour la vérification des fuites mémoire sur Windows)
 
-## Installation
+## Installation et Compilation
 
-1. Clonez le dépôt 
+1. Clonez le dépôt :
+   ```
+   git clone [URL_DU_REPO]
+   cd [NOM_DU_DOSSIER]
+   ```
 
-2. Compilez le projet avec CMake
+2. Créez un dossier de build et naviguez dedans :
+   ```
+   mkdir build
+   cd build
+   ```
 
-3. Assurez-vous que le fichier `dico.txt` est dans le même répertoire que l'exécutable généré.
+3. Générez les fichiers de build avec CMake :
+   ```
+   cmake ..
+   ```
+
+4. Compilez le projet :
+   - Pour une version de release :
+     ```
+     cmake --build . --config Release
+     ```
+   - Pour une version de debug :
+     ```
+     cmake --build . --config Debug
+     ```
+
+L'exécutable sera généré dans le dossier `build/bin/`.
 
 ## Utilisation
 
-Pour lancer le jeu, exécutez simplement l'exécutable généré
+Pour lancer le jeu, exécutez :
+```
+./bin/pendu
+```
+
+## Vérification des fuites mémoire (Windows uniquement)
+
+Si Dr. Memory est installé, vous pouvez l'exécuter directement via CMake :
+```
+cmake --build . --target run_drmemory
+```
+
+## Concepts de programmation utilisés
+
+- Pointeurs
+- Structures
+- Tableaux
+- Allocation dynamique de mémoire
+- Fonctions
+- Manipulation de fichiers

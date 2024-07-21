@@ -7,26 +7,22 @@
 #include <string.h>
 #include <time.h>
 
-void initialiser_partie(Partie *p) {
-    strcpy(p->mot, dictionnaire[rand() % TAILLE_DICO]);
-    int longueur = strlen(p->mot);
-    p->mot[longueur-1] = '\0';
-    memset(p->trouve, '_', longueur-1);
-    p->trouve[longueur-1] = '\0';
-    p->erreurs = 0;
-    for (int i = 0; i < 26; i++) {
-        p->lettres_utilisees[i] = false;
-    }
-}
+#ifdef _WIN32
+#include <crtdbg.h>
+#endif
 
-void afficher_lettres_utilisees(Partie *p) {
-    printf("Lettres utilisees : ");
-    for (int i = 0; i < 26; i++) {
-        if (p->lettres_utilisees[i]) {
-            printf("%c ", 'A' + i);
-        }
+void initialiser_partie(Partie *p) {
+    char *mot_choisi = choisir_mot();
+    size_t len = strlen(mot_choisi);
+    if (len >= TAILLE_MOT) {
+        fprintf(stderr, "Erreur: mot trop long\n");
+        exit(1);
     }
-    printf("\n");
+    strcpy(p->mot, mot_choisi);
+    memset(p->trouve, '_', len);
+    p->trouve[len] = '\0';
+    p->erreurs = 0;
+    memset(p->lettres_utilisees, 0, sizeof(p->lettres_utilisees));
 }
 
 void afficher_partie(Partie *p) {
@@ -35,7 +31,7 @@ void afficher_partie(Partie *p) {
     afficher_lettres_utilisees(p);
 }
 
-char demander_lettre() {
+char demander_lettre(void) {
     char lettre;
     do {
         printf("Proposez une lettre: ");
@@ -47,7 +43,7 @@ char demander_lettre() {
 
 void update_partie(Partie *p, char lettre) {
     bool trouve = false;
-    for(int i=0; p->mot[i]; i++) {
+    for(int i = 0; p->mot[i]; i++) {
         if(toupper(p->mot[i]) == lettre) {
             p->trouve[i] = p->mot[i];
             trouve = true;
@@ -74,7 +70,25 @@ void afficher_pendu(int erreurs) {
     printf("_|___\n\n");
 }
 
-int main() {
+void afficher_lettres_utilisees(Partie *p) {
+    printf("Lettres utilisees : ");
+    for (int i = 0; i < ALPHABET_SIZE; i++) {
+        if (p->lettres_utilisees[i]) {
+            printf("%c ", 'A' + i);
+        }
+    }
+    printf("\n");
+}
+
+void nettoyer(void) {
+    liberer_dico();
+}
+
+int main(void) {
+#ifdef _WIN32
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
+
     srand(time(NULL));
     charger_dico("dico.txt");
 
@@ -82,7 +96,7 @@ int main() {
     do {
         incrementer_parties_jouees();
 
-        Partie p;
+        static Partie p;
         initialiser_partie(&p);
 
         while(!partie_finie(&p)) {
@@ -104,7 +118,13 @@ int main() {
         printf("Voulez-vous rejouer (o/n) ? ");
         scanf(" %c", &rejouer);
         while(getchar()!='\n');
-    } while(rejouer == 'o');
+    } while(rejouer == 'o' || rejouer == 'O');
+
+    nettoyer();
+
+#ifdef _WIN32
+    _CrtDumpMemoryLeaks();
+#endif
 
     return 0;
 }
